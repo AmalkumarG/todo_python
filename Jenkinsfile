@@ -1,38 +1,31 @@
 pipeline {
-    agent any
+    agent { label 'node1' }
 
     environment {
-        PROJECT_DIR = "/home/akku/intern_python_proj"
+        PROJECT_DIR = "/home/$USER/intern_python_proj"
         COMPOSE_FILE = "compose.yml"
     }
 
     stages {
 
-        stage('Checkout (Optional)') {
+        stage('Clone Repo') {
             steps {
-                echo "Using existing local project directory"
-                // If you want GitHub instead, uncomment below:
-                git 'https://github.com/AmalkumarG/todo_python.git'
+                git branch: 'main', url: 'https://github.com/AmalkumarG/todo_python.git'
             }
         }
 
-        stage('Stop Existing Containers') {
+        stage('Deploy') {
             steps {
                 dir("${PROJECT_DIR}") {
-                    sh 'docker compose -f ${COMPOSE_FILE} down || true'
+                    sh '''
+                    docker compose -f ${COMPOSE_FILE} down || true
+                    docker compose -f ${COMPOSE_FILE} up -d --build
+                    '''
                 }
             }
         }
 
-        stage('Build & Deploy') {
-            steps {
-                dir("${PROJECT_DIR}") {
-                    sh 'docker compose -f ${COMPOSE_FILE} up -d --build'
-                }
-            }
-        }
-
-        stage('Verify Deployment') {
+        stage('Verify') {
             steps {
                 sh 'docker ps'
             }
@@ -41,10 +34,9 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment successful! App should be running on port 8000"
+            echo "✅ Deployment successful"
         }
         failure {
-            echo "❌ Deployment failed. Check logs using: docker logs <container>"
+            echo "❌ Deployment failed"
         }
     }
-}
