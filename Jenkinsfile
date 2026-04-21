@@ -16,12 +16,12 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                dir("${PROJECT_DIR}") {
+                
                     sh '''
                     docker compose -f ${COMPOSE_FILE} down || true
                     docker compose -f ${COMPOSE_FILE} up -d --build
                     '''
-                }
+                
             }
         }
 
