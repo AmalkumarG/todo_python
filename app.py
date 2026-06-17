@@ -139,7 +139,7 @@ class TodoHandler(BaseHTTPRequestHandler):
         </head>
         <body>
             <div class="container">
-                <h2>📝 To-Do Appl</h2>
+                <h2>📝 To-Do App hellooooo</h2>
 
                 <form method="POST">
                     <input type="text" name="task" placeholder="Enter task" required>
