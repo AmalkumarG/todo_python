@@ -77,7 +77,7 @@ class TodoHandler(BaseHTTPRequestHandler):
         html = f"""
         <html>
         <head>
-            <title>To-Do App</title>
+            <title>To-Do App hai</title>
             <style>
                 body {{
                     font-family: Arial;
